@@ -8,26 +8,29 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    minWidth: 800,
-    minHeight: 600,
-    frame: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     },
-    backgroundColor: '#0A0F2C'
+    frame: false,
+    backgroundColor: '#1a1a1a'
   });
 
-  mainWindow.loadURL(
-    isDev
-      ? 'http://localhost:3000'
-      : `file://${path.join(__dirname, '../build/index.html')}`
-  );
+  const startUrl = isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, 'dist/index.html')}`;
+  mainWindow.loadURL(startUrl);
 
   if (isDev) {
     mainWindow.webContents.openDevTools();
   }
+
+  mainWindow.on('maximize', () => {
+    mainWindow.webContents.send('maximize');
+  });
+
+  mainWindow.on('unmaximize', () => {
+    mainWindow.webContents.send('unmaximize');
+  });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -72,17 +75,17 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  if (mainWindow === null) {
+  if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });
 
 // Controles da janela
-ipcMain.on('window-minimize', () => {
+ipcMain.on('minimize', () => {
   mainWindow.minimize();
 });
 
-ipcMain.on('window-maximize', () => {
+ipcMain.on('maximize', () => {
   if (mainWindow.isMaximized()) {
     mainWindow.unmaximize();
   } else {
@@ -90,25 +93,21 @@ ipcMain.on('window-maximize', () => {
   }
 });
 
-ipcMain.on('window-close', () => {
+ipcMain.on('close', () => {
   mainWindow.close();
 });
 
 // Navegação
 ipcMain.on('navigate', (event, url) => {
-  mainWindow.loadURL(url);
+  mainWindow.webContents.send('navigate', url);
 });
 
 ipcMain.on('go-back', () => {
-  if (mainWindow.webContents.canGoBack()) {
-    mainWindow.webContents.goBack();
-  }
+  mainWindow.webContents.goBack();
 });
 
 ipcMain.on('go-forward', () => {
-  if (mainWindow.webContents.canGoForward()) {
-    mainWindow.webContents.goForward();
-  }
+  mainWindow.webContents.goForward();
 });
 
 ipcMain.on('reload', () => {
