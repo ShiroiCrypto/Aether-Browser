@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aether Browser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .titlebar {
+            height: 32px;
+            background: #2d2d2d;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            -webkit-app-region: drag;
+        }
+
+        .titlebar-buttons {
+            display: flex;
+            margin-left: auto;
+            -webkit-app-region: no-drag;
+        }
+
+        .titlebar-button {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .titlebar-button:hover {
+            background: #3d3d3d;
+        }
+
+        .navbar {
+            background: #2d2d2d;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .url-bar {
+            flex: 1;
+            background: #3d3d3d;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .url-bar:focus {
+            outline: none;
+            background: #4d4d4d;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .nav-button {
+            background: #3d3d3d;
+            border: none;
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            background: #4d4d4d;
+        }
+
+        #browser-view {
+            flex: 1;
+            background: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="titlebar">
+        <div class="titlebar-buttons">
+            <button class="titlebar-button" id="minimize">─</button>
+            <button class="titlebar-button" id="maximize">□</button>
+            <button class="titlebar-button" id="close">×</button>
+        </div>
+    </div>
+
+    <div class="navbar">
+        <div class="nav-buttons">
+            <button class="nav-button" id="back">←</button>
+            <button class="nav-button" id="forward">→</button>
+            <button class="nav-button" id="reload">↻</button>
+        </div>
+        <input type="text" class="url-bar" id="url-input" placeholder="Digite uma URL...">
+    </div>
+
+    <div id="browser-view"></div>
+
+    <script src="renderer.js"></script>
+</body>
+</html> 
